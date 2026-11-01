@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { TESTIMONIALS } from "@/data/content";
+import type { SiteData } from "@/lib/site";
 
-export function Testimonials() {
+export function Testimonials({ site }: { site: SiteData }) {
+  const items = site.testimonials;
   const reduce = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [stopped, setStopped] = useState(false);
 
-  const total = TESTIMONIALS.length;
+  const total = items.length;
   const autoplay = !reduce && !paused && !stopped;
 
   useEffect(() => {
@@ -19,8 +20,10 @@ export function Testimonials() {
     return () => window.clearInterval(id);
   }, [autoplay, total]);
 
+  if (total === 0) return null;
+
   const go = (delta: number) => setIndex((i) => (i + delta + total) % total);
-  const item = TESTIMONIALS[index];
+  const item = items[Math.min(index, total - 1)];
 
   return (
     <section
@@ -30,7 +33,7 @@ export function Testimonials() {
     >
       <div className="mx-auto max-w-3xl text-center">
         <h2 id="testimonials-title" className="text-3xl font-bold text-brand md:text-4xl">
-          מה הורים מספרים
+          {site.testimonials_title}
         </h2>
 
         <div
@@ -81,9 +84,9 @@ export function Testimonials() {
               <span aria-hidden="true">→</span>
             </button>
             <div className="flex items-center gap-2" role="group" aria-label="בחירת המלצה">
-              {TESTIMONIALS.map((t, i) => (
+              {items.map((_, i) => (
                 <button
-                  key={t.name}
+                  key={i}
                   type="button"
                   onClick={() => setIndex(i)}
                   aria-label={`המלצה ${i + 1}`}

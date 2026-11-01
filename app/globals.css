@@ -20,6 +20,10 @@
   --color-cta: #f08a6b;
   --color-cta-hover: #f4a086;
 
+  /* Text on brand / CTA backgrounds. Overridden per site in lib/theme.ts */
+  --color-on-brand: #ffffff;
+  --color-on-cta: #2f3a4a;
+
   --font-sans: "Rubik Variable", system-ui, sans-serif;
 
   --radius-card: 1.75rem;

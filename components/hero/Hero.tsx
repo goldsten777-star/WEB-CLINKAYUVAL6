@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Bubbles } from "./Bubbles";
 import { Bird, Cloud, HillsBack, HillsFront, HillsMid, Sun } from "./Illustrations";
+import type { SiteData } from "@/lib/site";
+import type { SiteLinks } from "@/components/site-links";
 
-const TITLE = "כל ילד מקבל מקום להרגיש";
-
-export function Hero() {
+export function Hero({ site, links }: { site: SiteData; links: SiteLinks }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const k = reduce ? 0 : 1;
@@ -33,13 +33,13 @@ export function Hero() {
           transition: { duration: 0.9, delay, ease: "easeOut" as const },
         };
 
-  const words = TITLE.split(" ");
+  const words = site.hero_title.split(/\s+/);
 
   return (
     <section
       ref={ref}
       aria-labelledby="hero-title"
-      className="relative isolate h-[calc(90svh-4.5rem)] min-h-[600px] overflow-hidden bg-[linear-gradient(180deg,#cfe6f5_0%,#e9f1f4_38%,#fff8f0_70%,#ffe9dc_100%)] md:h-[calc(100svh-4.5rem)]"
+      className="relative isolate h-[calc(90svh-4.5rem)] min-h-[600px] overflow-hidden bg-[linear-gradient(180deg,#cfe6f5_0%,#e9f1f4_38%,var(--color-cream)_70%,#ffe9dc_100%)] md:h-[calc(100svh-4.5rem)]"
     >
       <Bubbles />
 
@@ -76,20 +76,21 @@ export function Hero() {
       >
         <h1 id="hero-title" className="text-4xl font-bold leading-tight text-brand sm:text-5xl md:text-6xl">
           {words.map((word, i) => (
-            <motion.span
-              key={i}
-              className="inline-block"
-              {...(reduce
-                ? { initial: false }
-                : {
-                    initial: { opacity: 0, y: 18 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { duration: 0.6, delay: 0.15 + i * 0.1, ease: "easeOut" },
-                  })}
-            >
-              {word}
-              {i < words.length - 1 ? " " : ""}
-            </motion.span>
+            <Fragment key={i}>
+              {i > 0 && " "}
+              <motion.span
+                className="inline-block"
+                {...(reduce
+                  ? { initial: false }
+                  : {
+                      initial: { opacity: 0, y: 18 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { duration: 0.6, delay: 0.15 + i * 0.1, ease: "easeOut" },
+                    })}
+              >
+                {word}
+              </motion.span>
+            </Fragment>
           ))}
         </h1>
 
@@ -103,7 +104,7 @@ export function Hero() {
                 transition: { duration: 0.7, delay: 0.75 },
               })}
         >
-          טיפול רגשי לילדים והדרכה להורים, בחום, בסבלנות ובשפה שילדים מבינים.
+          {site.hero_subtitle}
         </motion.p>
 
         <motion.div
@@ -117,16 +118,16 @@ export function Hero() {
               })}
         >
           <Link
-            href="/book"
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-cta px-9 text-lg font-semibold text-ink shadow-soft transition duration-200 hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-lg active:translate-y-0 motion-reduce:transform-none"
+            href={links.cta}
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-cta px-9 text-lg font-semibold text-on-cta shadow-soft transition duration-200 hover:-translate-y-0.5 hover:bg-cta-hover hover:shadow-lg active:translate-y-0 motion-reduce:transform-none"
           >
-            קבעו תור
+            {site.cta_label}
           </Link>
           <a
             href="#about"
             className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-brand/30 bg-white/60 px-7 text-base font-medium text-brand transition duration-200 hover:bg-white"
           >
-            הכירו את חנוך
+            הכירו את {site.therapist_name}
           </a>
         </motion.div>
       </motion.div>

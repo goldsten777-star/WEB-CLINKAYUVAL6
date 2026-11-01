@@ -7,7 +7,7 @@ export function ComingSoon({ title, text }: { title: string; text: string }) {
       <p className="mt-4 text-lg text-ink-soft">{text}</p>
       <Link
         href="/"
-        className="mt-8 inline-flex min-h-12 items-center rounded-full bg-cta px-8 text-lg font-semibold text-ink hover:bg-cta-hover"
+        className="mt-8 inline-flex min-h-12 items-center rounded-full bg-cta px-8 text-lg font-semibold text-on-cta hover:bg-cta-hover"
       >
         חזרה לדף הבית
       </Link>

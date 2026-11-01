@@ -1,21 +1,7 @@
-import { Header } from "@/components/Header";
-import { Hero } from "@/components/hero/Hero";
-import { Services } from "@/components/sections/Services";
-import { About } from "@/components/sections/About";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { Footer } from "@/components/sections/Footer";
+import { DEMO_SITE } from "@/data/content";
+import { DEMO_LINKS } from "@/components/site-links";
+import { SitePage } from "@/components/SitePage";
 
 export default function Home() {
-  return (
-    <>
-      <Header />
-      <main id="main">
-        <Hero />
-        <Services />
-        <About />
-        <Testimonials />
-      </main>
-      <Footer />
-    </>
-  );
+  return <SitePage site={DEMO_SITE} links={DEMO_LINKS} />;
 }

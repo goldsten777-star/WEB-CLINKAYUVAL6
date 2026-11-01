@@ -1,13 +1,28 @@
 import Link from "next/link";
-import { SERVICES } from "@/data/content";
+import type { ServiceIcon, SiteData, Tone } from "@/lib/site";
+import type { SiteLinks } from "@/components/site-links";
 import { Reveal } from "@/components/Reveal";
 
-function Icon({ name }: { name: (typeof SERVICES)[number]["icon"] }) {
+const TONE_CLASS: Record<Tone, string> = {
+  mint: "bg-mint",
+  peach: "bg-peach",
+  sky: "bg-sky",
+  lavender: "bg-lavender",
+  butter: "bg-butter",
+};
+
+const GRID_COLS: Record<number, string> = {
+  1: "mx-auto max-w-md",
+  2: "md:grid-cols-2",
+  3: "md:grid-cols-3",
+  4: "md:grid-cols-2 lg:grid-cols-4",
+};
+
+function Icon({ name }: { name: ServiceIcon }) {
   const common = {
     viewBox: "0 0 48 48",
-    className: "h-12 w-12",
+    className: "h-12 w-12 stroke-brand",
     fill: "none",
-    stroke: "#1d5e8f",
     strokeWidth: 3,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
@@ -39,25 +54,23 @@ function Icon({ name }: { name: (typeof SERVICES)[number]["icon"] }) {
   );
 }
 
-export function Services() {
+export function Services({ site, links }: { site: SiteData; links: SiteLinks }) {
   return (
     <section id="services" aria-labelledby="services-title" className="relative z-10 -mt-8 scroll-mt-20 rounded-t-[2.5rem] bg-cream px-4 pb-20 pt-24">
       <div className="mx-auto max-w-6xl">
         <Reveal className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="services-title" className="text-3xl font-bold text-brand md:text-4xl">
-            איך אפשר לעזור
+            {site.services_title}
           </h2>
-          <p className="mt-3 text-lg text-ink-soft">
-            שלוש דרכים להתחיל, בהתאם למה שהילד והמשפחה צריכים עכשיו.
-          </p>
+          <p className="mt-3 text-lg text-ink-soft">{site.services_subtitle}</p>
         </Reveal>
 
-        <ul className="grid gap-6 md:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <li key={s.id}>
+        <ul className={`grid gap-6 ${GRID_COLS[site.services.length] ?? "md:grid-cols-3"}`}>
+          {site.services.map((s, i) => (
+            <li key={i}>
               <Reveal delay={i * 0.12} className="h-full">
                 <article
-                  className={`${s.tone} flex h-full flex-col rounded-card p-8 shadow-soft transition-transform duration-300 hover:-translate-y-1 motion-reduce:transform-none`}
+                  className={`${TONE_CLASS[s.tone]} flex h-full flex-col rounded-card p-8 shadow-soft transition-transform duration-300 hover:-translate-y-1 motion-reduce:transform-none`}
                 >
                   <div className="mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-white/70">
                     <Icon name={s.icon} />
@@ -65,10 +78,10 @@ export function Services() {
                   <h3 className="text-2xl font-bold text-ink">{s.title}</h3>
                   <p className="mt-3 flex-1 text-base leading-relaxed text-ink-soft">{s.text}</p>
                   <Link
-                    href="/book"
+                    href={links.cta}
                     className="mt-6 inline-flex min-h-11 items-center self-start rounded-full bg-white/80 px-5 text-base font-semibold text-brand transition-colors hover:bg-white"
                   >
-                    קבעו תור
+                    {site.cta_label}
                     <span aria-hidden="true" className="ms-2">
                       ←
                     </span>
