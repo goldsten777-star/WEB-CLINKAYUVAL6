@@ -20,7 +20,7 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
           </h1>
           <p className="mb-8 text-center text-lg text-ink-soft">
             {signup
-              ? "נרשמים, מספרים על עצמכם בקצרה, ומקבלים אתר מוכן לעריכה."
+              ? "ההרשמה בחינם. מספרים על עצמכם בקצרה, ומקבלים אתר מוכן לעריכה."
               : "נכנסים לעריכת האתר ולצפייה בפניות."}
           </p>
           <Card>

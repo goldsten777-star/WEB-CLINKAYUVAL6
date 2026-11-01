@@ -10,10 +10,10 @@ import { Cloud, HillsBack, HillsMid, Sun } from "@/components/hero/Illustrations
 export const metadata: Metadata = {
   title: "בונה אתרים למטפלים | אתר מקצועי משני משפטים (הדגמה)",
   description:
-    "מספרים בשני משפטים מי אתם ועם מי אתם עובדים, ומקבלים אתר מעוצב בעברית עם טופס פניות. עורכים כל מילה ומפרסמים בכתובת משלכם.",
+    "הרשמה בחינם. מספרים בשני משפטים מי אתם ועם מי אתם עובדים, ומקבלים אתר מעוצב בעברית עם טופס פניות. עורכים כל מילה ומפרסמים בכתובת משלכם.",
   openGraph: {
     title: "בונה אתרים למטפלים",
-    description: "אתר מקצועי למטפלים, משני משפטים.",
+    description: "אתר מקצועי למטפלים, משני משפטים. ההרשמה בחינם.",
     locale: "he_IL",
     type: "website",
   },
@@ -29,8 +29,8 @@ const ctaSecondary =
 
 const STEPS = [
   {
-    title: "נרשמים",
-    text: "מייל וסיסמה, וזהו. בלי כרטיס אשראי ובלי התקנות.",
+    title: "נרשמים בחינם",
+    text: "מייל וסיסמה, וזהו. ההרשמה בחינם, בלי כרטיס אשראי ובלי התקנות.",
   },
   {
     title: "מספרים בשני משפטים",
@@ -91,6 +91,10 @@ const FEATURES: { title: string; text: string; tone: string; icon: ReactNode }[]
 
 const FAQ = [
   {
+    q: "כמה זה עולה?",
+    a: "ההרשמה בחינם, וגם יצירת האתר, העריכה והפרסום.",
+  },
+  {
     q: "צריך לדעת לבנות אתרים?",
     a: "לא. כותבים שני משפטים, מקבלים אתר מוכן, ומתקנים בטופס פשוט. אין קוד ואין גרירת רכיבים.",
   },
@@ -133,7 +137,7 @@ export default function LandingPage() {
             href={SIGNUP}
             className="inline-flex min-h-11 items-center rounded-full bg-cta px-5 text-base font-semibold text-on-cta transition-colors hover:bg-cta-hover"
           >
-            הרשמה
+            הרשמה בחינם
           </Link>
         </nav>
       </PlatformHeader>
@@ -169,12 +173,13 @@ export default function LandingPage() {
               </p>
               <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <Link href={SIGNUP} className={ctaPrimary}>
-                  הרשמה ויצירת אתר
+                  הרשמה בחינם
                 </Link>
                 <Link href={EXAMPLE} className={ctaSecondary}>
                   לצפייה באתר לדוגמה
                 </Link>
               </div>
+              <p className="mt-3 text-sm text-ink-soft">בלי כרטיס אשראי.</p>
             </Reveal>
 
             {/* Two sentences -> a site */}
@@ -289,7 +294,7 @@ export default function LandingPage() {
               שני משפטים עליכם, וכמה דקות של עריכה. האתר שלכם יכול להיות באוויר עוד היום.
             </p>
             <Link href={SIGNUP} className={`${ctaPrimary} mt-8`}>
-              הרשמה ויצירת אתר
+              הרשמה בחינם
             </Link>
           </Reveal>
         </section>
@@ -303,7 +308,7 @@ export default function LandingPage() {
           <p className="text-lg font-bold">בונה האתרים למטפלים</p>
           <nav aria-label="קישורים בתחתית העמוד" className="flex gap-6 text-base">
             <Link href={SIGNUP} className="underline-offset-4 hover:underline">
-              הרשמה
+              הרשמה בחינם
             </Link>
             <Link href="/login" className="underline-offset-4 hover:underline">
               כניסה
