@@ -24,3 +24,10 @@ sentences, Gemini fills in the whole site, and it is published at `/<slug>` with
    `https://<your-domain>/auth/callback` to the redirect URLs.
 3. Copy `.env.example` to `.env.local` (and to the Vercel project's environment variables) and fill it in.
 4. `npm install && npm run dev`
+
+## Deployment
+
+The Vercel project `hanoch-clinic` is connected to this repository. Every push to
+`claude/intelligent-pascal-prtoji` (the repository's default branch) deploys to
+production at https://hanoch-clinic.vercel.app. Environment variables live in the
+Vercel project settings (`GEMINI_API_KEY` is set for Production only).
