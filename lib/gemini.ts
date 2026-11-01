@@ -109,13 +109,14 @@ export class GeminiError extends Error {}
 // Models to try in order, each with its own time limit (ms). When one is
 // overloaded or too slow, the next one is used. Total stays under the
 // page's maxDuration (90s).
-const MODELS = [...new Set([MODEL, "gemini-flash-latest", "gemini-2.5-flash"])];
+const MODELS = [...new Set([MODEL, "gemini-flash-latest", "gemini-3.8-flash"])];
 const TIMEOUTS = [25_000, 40_000, 20_000];
 
-// Overloaded, rate-limited or timed out: worth trying another model.
+// Overloaded, rate-limited, timed out or retired: worth trying another model.
 function isBusy(e: unknown) {
   const status = (e as { status?: number })?.status;
   return (
+    status === 404 ||
     status === 429 ||
     status === 500 ||
     status === 503 ||
