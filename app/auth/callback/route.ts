@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     ok = !(await supabase.auth.verifyOtp({ type, token_hash: tokenHash })).error;
   }
 
-  return NextResponse.redirect(new URL(ok ? next : "/login", origin));
+  return NextResponse.redirect(new URL(ok ? next : "/login?error=oauth", origin));
 }
 
 // Only allow redirects inside this site.

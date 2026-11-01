@@ -51,6 +51,22 @@ export async function signIn(_: AuthState, formData: FormData): Promise<AuthStat
   redirect("/dashboard");
 }
 
+// Sends the visitor to Google; Google sends them back to /auth/callback.
+export async function signInWithGoogle() {
+  if (!isSupabaseConfigured()) redirect("/login?error=oauth");
+  const origin = (await headers()).get("origin") ?? "";
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${origin}/auth/callback?next=/dashboard` },
+  });
+  if (error || !data.url) {
+    console.error("Google sign-in failed to start", error);
+    redirect("/login?error=oauth");
+  }
+  redirect(data.url);
+}
+
 export async function signOut() {
   const supabase = await createSupabaseServerClient();
   await supabase.auth.signOut();

@@ -1,10 +1,15 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Card, NotConfigured, PlatformHeader } from "@/components/platform/ui";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { isGoogleEnabled } from "@/lib/supabase/providers";
 import { AuthForm } from "./AuthForm";
+import { GoogleButton } from "./GoogleButton";
+import { OAuthError } from "./OAuthError";
 import { signIn, signUp } from "./actions";
 
-export function AuthPage({ mode }: { mode: "login" | "signup" }) {
+export async function AuthPage({ mode }: { mode: "login" | "signup" }) {
+  const google = await isGoogleEnabled();
   const signup = mode === "signup";
   return (
     <>
@@ -24,7 +29,17 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
               : "נכנסים לעריכת האתר ולצפייה בפניות."}
           </p>
           <Card>
-            {!isSupabaseConfigured() ? <NotConfigured /> : <AuthForm mode={mode} action={signup ? signUp : signIn} />}
+            {!isSupabaseConfigured() ? (
+              <NotConfigured />
+            ) : (
+              <>
+                <Suspense>
+                  <OAuthError />
+                </Suspense>
+                {google && <GoogleButton signup={signup} />}
+                <AuthForm mode={mode} action={signup ? signUp : signIn} />
+              </>
+            )}
           </Card>
         </div>
       </main>
