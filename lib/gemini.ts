@@ -105,19 +105,35 @@ ${JSON.stringify(
 
 export class GeminiError extends Error {}
 
-// Turns a short description into validated site content. Retries once
-// if the model returns something that doesn't fit the schema.
+// Models to try in order. When one is overloaded, the next one is used.
+const MODELS = [...new Set([MODEL, "gemini-flash-lite-latest", "gemini-2.5-flash"])];
+
+// Overloaded, rate-limited or timed out: worth trying another model.
+function isBusy(e: unknown) {
+  const status = (e as { status?: number })?.status;
+  return status === 429 || status === 500 || status === 503 || /timeout|timed out|abort/i.test(String(e));
+}
+
+// Turns a short description into validated site content. Falls back to
+// another model when one is busy, and retries if the answer doesn't fit
+// the schema.
 export async function generateSiteContent(description: string): Promise<SiteContent> {
   if (!isGeminiConfigured()) throw new GeminiError("מפתח Gemini לא הוגדר בשרת.");
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+    // Fail fast and move to the next model instead of the SDK's long backoff.
+    httpOptions: { timeout: 20_000, retryOptions: { attempts: 1 } },
+  });
   const responseJsonSchema = buildResponseSchema();
   const started = Date.now();
   let lastIssue = "";
+  let modelIndex = 0;
   // Little "thinking" keeps the answer fast; dropped if the model rejects it.
   let lowThinking = true;
 
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const model = MODELS[modelIndex];
     const contents =
       lastIssue === ""
         ? description
@@ -126,7 +142,7 @@ export async function generateSiteContent(description: string): Promise<SiteCont
     let response;
     try {
       response = await ai.models.generateContent({
-        model: MODEL,
+        model,
         contents,
         config: {
           systemInstruction: SYSTEM_PROMPT,
@@ -138,13 +154,19 @@ export async function generateSiteContent(description: string): Promise<SiteCont
       });
     } catch (e) {
       if (lowThinking && /thinking/i.test(String(e))) {
-        console.warn(`Gemini (${MODEL}) rejected thinkingLevel, retrying without it`);
+        console.warn(`Gemini (${model}) rejected thinkingLevel, retrying without it`);
         lowThinking = false;
         continue;
       }
+      if (isBusy(e) && modelIndex < MODELS.length - 1) {
+        console.warn(`Gemini (${model}) busy after ${((Date.now() - started) / 1000).toFixed(1)}s, trying ${MODELS[modelIndex + 1]}`);
+        modelIndex++;
+        continue;
+      }
+      if (isBusy(e)) throw new GeminiError("Gemini עמוס כרגע. נסו שוב בעוד דקה.");
       throw e;
     }
-    console.info(`Gemini (${MODEL}) attempt ${attempt + 1}: ${((Date.now() - started) / 1000).toFixed(1)}s`);
+    console.info(`Gemini (${model}) attempt ${attempt + 1}: ${((Date.now() - started) / 1000).toFixed(1)}s`);
 
     let json: unknown;
     try {

@@ -7,7 +7,7 @@ import { siteOrigin } from "../request";
 import { NewSiteFlow } from "./NewSiteFlow";
 
 // Generating a site with Gemini can take a while.
-export const maxDuration = 60;
+export const maxDuration = 90;
 
 export default function NewSitePage() {
   if (!isSupabaseConfigured()) return <NotConfigured />;
