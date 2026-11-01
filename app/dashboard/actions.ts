@@ -3,7 +3,7 @@
 import { updateTag } from "next/cache";
 import { z } from "zod";
 import { GeminiError, generateSiteContent } from "@/lib/gemini";
-import { DEFAULT_IMAGE, type SiteContent, type SiteData, siteSchema, slugSchema } from "@/lib/site";
+import { DEFAULT_ABOUT_IMAGE, DEFAULT_LOGO, type SiteContent, type SiteData, siteSchema, slugSchema } from "@/lib/site";
 import { siteTag } from "@/lib/sites";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -99,8 +99,8 @@ export async function saveSite(_: SaveState, formData: FormData): Promise<SaveSt
     if (url && typeof url === "object") return url;
     if (url) site[field === "logo_file" ? "logo_url" : "about_image_url"] = url;
   }
-  if (formData.get("reset_logo") === "1") site.logo_url = DEFAULT_IMAGE;
-  if (formData.get("reset_about_image") === "1") site.about_image_url = DEFAULT_IMAGE;
+  if (formData.get("reset_logo") === "1") site.logo_url = DEFAULT_LOGO;
+  if (formData.get("reset_about_image") === "1") site.about_image_url = DEFAULT_ABOUT_IMAGE;
 
   const { data: existing } = await supabase.from("therapists").select("slug").eq("user_id", userId).maybeSingle();
 

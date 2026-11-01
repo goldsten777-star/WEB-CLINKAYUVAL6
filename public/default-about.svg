@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="איור של נבט צומח בעציץ">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe6f5"/>
+      <stop offset="0.6" stop-color="#eef5f6"/>
+      <stop offset="1" stop-color="#fff8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="640" rx="48" fill="url(#sky)"/>
+
+  <!-- soft background shapes -->
+  <circle cx="150" cy="170" r="92" fill="#e3daf5" opacity="0.8"/>
+  <circle cx="500" cy="230" r="70" fill="#ffd9c9" opacity="0.8"/>
+  <circle cx="520" cy="120" r="44" fill="#fdb43a"/>
+  <circle cx="520" cy="120" r="64" fill="#ffe08a" opacity="0.45"/>
+
+  <!-- clouds -->
+  <g fill="#ffffff" opacity="0.95">
+    <circle cx="210" cy="300" r="22"/><circle cx="238" cy="288" r="28"/><circle cx="268" cy="300" r="22"/>
+    <rect x="196" y="300" width="86" height="22" rx="11"/>
+  </g>
+
+  <!-- hills -->
+  <path d="M0 470 C 140 410, 300 420, 420 460 S 580 500, 640 450 L640 640 L0 640 Z" fill="#cdebdd"/>
+  <path d="M0 540 C 160 500, 330 520, 470 545 S 600 560, 640 535 L640 640 L0 640 Z" fill="#b5e0c4"/>
+
+  <!-- pot -->
+  <path d="M250 450 L390 450 L372 560 Q370 572 358 572 L282 572 Q270 572 268 560 Z" fill="#f08a6b"/>
+  <rect x="240" y="436" width="160" height="28" rx="12" fill="#f4a086"/>
+
+  <!-- sprout -->
+  <path d="M320 440 C 318 390, 322 340, 320 290" stroke="#3f8f68" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M320 380 C 280 380, 246 350, 240 310 C 282 306, 314 334, 320 380 Z" fill="#7fc79a"/>
+  <path d="M320 340 C 360 344, 396 316, 404 276 C 360 270, 326 300, 320 340 Z" fill="#8fd1a8"/>
+  <path d="M320 296 C 300 270, 300 236, 320 212 C 340 236, 340 270, 320 296 Z" fill="#a9ddbe"/>
+
+  <!-- heart -->
+  <path d="M430 360 C 410 346, 404 330, 412 320 C 420 310, 430 314, 432 322 C 434 314, 444 310, 452 320 C 460 330, 454 346, 432 360 Z" fill="#f2635f" opacity="0.85"/>
+
+  <!-- flowers -->
+  <circle cx="120" cy="520" r="9" fill="#fdb43a"/>
+  <circle cx="160" cy="540" r="7" fill="#f2635f"/>
+  <circle cx="520" cy="530" r="8" fill="#ffffff"/>
+  <circle cx="560" cy="512" r="7" fill="#fdb43a"/>
+</svg>

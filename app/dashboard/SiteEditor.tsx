@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useActionState, useState, type ReactNode } from "react";
 import {
-  DEFAULT_IMAGE,
+  DEFAULT_ABOUT_IMAGE,
+  DEFAULT_LOGO,
   SERVICE_ICONS,
   TONES,
   type Service,
@@ -86,12 +87,14 @@ function ImageField({
   current,
   fileName,
   resetName,
+  defaultSrc,
 }: {
   id: string;
   label: string;
   current: string;
   fileName: string;
   resetName: string;
+  defaultSrc: string;
 }) {
   const [reset, setReset] = useState(false);
   return (
@@ -102,7 +105,7 @@ function ImageField({
       <div className="flex flex-wrap items-center gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={reset ? DEFAULT_IMAGE : current}
+          src={reset ? defaultSrc : current}
           alt=""
           className="h-20 w-20 rounded-2xl bg-cream object-contain p-1 shadow-sm"
         />
@@ -113,10 +116,10 @@ function ImageField({
           accept="image/png,image/jpeg,image/webp"
           className="text-base text-ink file:me-3 file:min-h-11 file:cursor-pointer file:rounded-full file:border-0 file:bg-sky file:px-4 file:font-medium file:text-brand"
         />
-        {current !== DEFAULT_IMAGE && (
+        {current !== defaultSrc && (
           <label className="flex items-center gap-2 text-base text-ink-soft">
             <input type="checkbox" name={resetName} value="1" checked={reset} onChange={(e) => setReset(e.target.checked)} />
-            חזרה לאיור ברירת המחדל
+            חזרה לתמונת ברירת המחדל
           </label>
         )}
       </div>
@@ -216,7 +219,7 @@ export function SiteEditor({
         </div>
         <TextField id="tagline" label="תיאור קצר (בלשונית הדפדפן)" value={site.tagline} max={80} onChange={(v) => set("tagline", v)} />
         <TextField id="meta_description" label="תיאור לגוגל" value={site.meta_description} max={200} multiline onChange={(v) => set("meta_description", v)} />
-        <ImageField key={site.logo_url} id="logo_file" label="לוגו" current={site.logo_url} fileName="logo_file" resetName="reset_logo" />
+        <ImageField key={site.logo_url} id="logo_file" label="לוגו" current={site.logo_url} fileName="logo_file" resetName="reset_logo" defaultSrc={DEFAULT_LOGO} />
       </Section>
 
       <Section title="פתיח">
@@ -314,7 +317,7 @@ export function SiteEditor({
           )}
         </div>
 
-        <ImageField key={site.about_image_url} id="about_image_file" label="תמונה" current={site.about_image_url} fileName="about_image_file" resetName="reset_about_image" />
+        <ImageField key={site.about_image_url} id="about_image_file" label="תמונה" current={site.about_image_url} fileName="about_image_file" resetName="reset_about_image" defaultSrc={DEFAULT_ABOUT_IMAGE} />
         <TextField id="about_image_alt" label="תיאור התמונה (לקוראי מסך)" value={site.about_image_alt} max={150} onChange={(v) => set("about_image_alt", v)} />
       </Section>
 

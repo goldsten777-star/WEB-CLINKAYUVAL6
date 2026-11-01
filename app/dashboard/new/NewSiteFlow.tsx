@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { DEMO_SITE } from "@/data/content";
-import type { SiteData } from "@/lib/site";
+import { DEFAULT_ABOUT_ALT, DEFAULT_ABOUT_IMAGE, DEFAULT_LOGO, type SiteData } from "@/lib/site";
 import { slugify } from "@/lib/slugify";
 import { Alert, Button, Card, Label, Textarea } from "@/components/platform/ui";
 import { type GenerateState, generateSite } from "../actions";
@@ -32,7 +32,14 @@ export function NewSiteFlow({
 
   // Generated (or demo) content goes into the editor, keeping the
   // therapist's own images, contact details and address if they have a site.
-  const base = { ...DEMO_SITE, ...existingImages, ...existingContact };
+  const base: SiteData = {
+    ...DEMO_SITE,
+    logo_url: DEFAULT_LOGO,
+    about_image_url: DEFAULT_ABOUT_IMAGE,
+    about_image_alt: DEFAULT_ABOUT_ALT,
+    ...existingImages,
+    ...existingContact,
+  };
   if (state.content || manual) {
     const site: SiteData = { ...base, ...(state.content ?? {}) };
     return (

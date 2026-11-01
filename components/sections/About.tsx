@@ -1,4 +1,4 @@
-import type { SiteData } from "@/lib/site";
+import { DEFAULT_ABOUT_ALT, DEFAULT_ABOUT_IMAGE, type SiteData } from "@/lib/site";
 import { Reveal } from "@/components/Reveal";
 import { SiteImage } from "@/components/SiteImage";
 
@@ -12,7 +12,7 @@ export function About({ site }: { site: SiteData }) {
           <div aria-hidden="true" className="absolute -bottom-3 end-8 h-20 w-20 rounded-full bg-mint" />
           <SiteImage
             src={site.about_image_url}
-            alt={site.about_image_alt}
+            alt={site.about_image_url === DEFAULT_ABOUT_IMAGE ? DEFAULT_ABOUT_ALT : site.about_image_alt}
             width={640}
             height={640}
             className="relative mx-auto aspect-square h-auto w-full rounded-[2.5rem] bg-white object-cover p-4 shadow-soft"

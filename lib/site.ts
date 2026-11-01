@@ -109,4 +109,7 @@ export type Testimonial = z.infer<typeof testimonialSchema>;
 export type ServiceIcon = (typeof SERVICE_ICONS)[number];
 export type Tone = (typeof TONES)[number];
 
-export const DEFAULT_IMAGE = "/logo.webp";
+// Neutral images for new therapists (the demo keeps Hanoch's own image).
+export const DEFAULT_LOGO = "/default-logo.svg";
+export const DEFAULT_ABOUT_IMAGE = "/default-about.svg";
+export const DEFAULT_ABOUT_ALT = "איור של נבט צומח בעציץ";

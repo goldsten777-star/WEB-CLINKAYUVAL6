@@ -1,8 +1,8 @@
 import Image, { type ImageProps } from "next/image";
 
-// Local images go through the Next image optimizer. Uploaded images
-// (full https URLs) are shown as-is so any host works.
+// Local raster images go through the Next image optimizer. Uploaded images
+// (full https URLs) and SVGs are shown as-is.
 export function SiteImage(props: ImageProps & { src: string }) {
-  const remote = props.src.startsWith("http");
-  return <Image {...props} alt={props.alt} unoptimized={remote || props.unoptimized} />;
+  const asIs = props.src.startsWith("http") || props.src.endsWith(".svg");
+  return <Image {...props} alt={props.alt} unoptimized={asIs || props.unoptimized} />;
 }
