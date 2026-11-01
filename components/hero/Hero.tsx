@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { Fragment, useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { Bubbles } from "./Bubbles";
 import { Bird, Cloud, HillsBack, HillsFront, HillsMid, Sun } from "./Illustrations";
 import type { SiteData } from "@/lib/site";
@@ -24,14 +25,14 @@ export function Hero({ site, links }: { site: SiteData; links: SiteLinks }) {
   const yFront = useTransform(scrollYProgress, [0, 1], [0, 18 * k]);
   const yText = useTransform(scrollYProgress, [0, 1], [0, -50 * k]);
 
-  const enter = (delay: number) =>
-    reduce
-      ? { initial: false as const }
-      : {
-          initial: { opacity: 0, y: 48 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.9, delay, ease: "easeOut" as const },
-        };
+  // Entrance animation. Always ends visible; with reduced motion it
+  // jumps straight to the end (reduce turns true only after hydration).
+  const appear = (y: number, duration: number, delay: number, ease?: "easeOut") => ({
+    initial: { opacity: 0, y },
+    animate: { opacity: 1, y: 0 },
+    transition: reduce ? { duration: 0 } : { duration, delay, ...(ease && { ease }) },
+  });
+  const enter = (delay: number) => appear(48, 0.9, delay, "easeOut");
 
   const words = site.hero_title.split(/\s+/);
 
@@ -80,13 +81,7 @@ export function Hero({ site, links }: { site: SiteData; links: SiteLinks }) {
               {i > 0 && " "}
               <motion.span
                 className="inline-block"
-                {...(reduce
-                  ? { initial: false }
-                  : {
-                      initial: { opacity: 0, y: 18 },
-                      animate: { opacity: 1, y: 0 },
-                      transition: { duration: 0.6, delay: 0.15 + i * 0.1, ease: "easeOut" },
-                    })}
+                {...appear(18, 0.6, 0.15 + i * 0.1, "easeOut")}
               >
                 {word}
               </motion.span>
@@ -96,26 +91,14 @@ export function Hero({ site, links }: { site: SiteData; links: SiteLinks }) {
 
         <motion.p
           className="mt-5 max-w-xl text-lg text-ink-soft md:text-xl"
-          {...(reduce
-            ? { initial: false }
-            : {
-                initial: { opacity: 0, y: 14 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.7, delay: 0.75 },
-              })}
+          {...appear(14, 0.7, 0.75)}
         >
           {site.hero_subtitle}
         </motion.p>
 
         <motion.div
           className="mt-8 flex flex-col items-center gap-3 sm:flex-row"
-          {...(reduce
-            ? { initial: false }
-            : {
-                initial: { opacity: 0, y: 14 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.7, delay: 0.95 },
-              })}
+          {...appear(14, 0.7, 0.95)}
         >
           <Link
             href={links.cta}

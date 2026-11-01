@@ -1,11 +1,15 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { SUPABASE_KEY, SUPABASE_URL } from "./env";
 
 // Client acting as the signed-in user (reads the auth cookies).
 // Use it only inside a <Suspense> boundary or a Server Action.
 export async function createSupabaseServerClient() {
+  // Supabase reads the clock to check token expiry; mark this as
+  // request-time work so Next doesn't try to prerender it.
+  await connection();
   const cookieStore = await cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_KEY, {
     cookies: {

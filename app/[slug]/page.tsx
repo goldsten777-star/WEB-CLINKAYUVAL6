@@ -1,5 +1,6 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { therapistLinks } from "@/components/site-links";
 import { SitePage } from "@/components/SitePage";
 import { DEMO_SLUG, getPublishedSite } from "@/lib/sites";
@@ -8,7 +9,7 @@ import { Contact } from "./Contact";
 type Props = { params: Promise<{ slug: string }> };
 
 // Prerender the demo; every other address renders on first visit and
-// stays cached until the owner saves.
+// stays cached until the owner saves or publishes.
 export async function generateStaticParams() {
   return [{ slug: DEMO_SLUG }];
 }
@@ -24,13 +25,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateViewport({ params }: Props): Promise<Viewport> {
-  const { slug } = await params;
-  const site = await getPublishedSite(slug);
-  return { themeColor: site?.color_background ?? "#fff8f0" };
+export default function TherapistPage({ params }: Props) {
+  // The address is read inside the boundary so the page shell can be
+  // served instantly while the site loads.
+  return (
+    <Suspense fallback={<div aria-busy="true" className="min-h-svh flex-1 bg-cream" />}>
+      <TherapistSite params={params} />
+    </Suspense>
+  );
 }
 
-export default async function TherapistPage({ params }: Props) {
+async function TherapistSite({ params }: Props) {
   const { slug } = await params;
   const site = await getPublishedSite(slug);
   if (!site) notFound();

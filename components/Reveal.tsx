@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import type { ReactNode } from "react";
 
 export function Reveal({
@@ -12,9 +13,8 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
+  // With reduced motion the content appears without moving.
   const reduce = useReducedMotion();
-
-  if (reduce) return <div className={className}>{children}</div>;
 
   return (
     <motion.div
@@ -22,7 +22,7 @@ export function Reveal({
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      transition={reduce ? { duration: 0 } : { duration: 0.6, delay, ease: "easeOut" }}
     >
       {children}
     </motion.div>
