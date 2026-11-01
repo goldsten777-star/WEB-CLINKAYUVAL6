@@ -105,13 +105,22 @@ ${JSON.stringify(
 
 export class GeminiError extends Error {}
 
-// Models to try in order. When one is overloaded, the next one is used.
+// Models to try in order, each with its own time limit (ms). When one is
+// overloaded or too slow, the next one is used. Total stays under the
+// page's maxDuration (90s).
 const MODELS = [...new Set([MODEL, "gemini-flash-lite-latest", "gemini-2.5-flash"])];
+const TIMEOUTS = [40_000, 25_000, 20_000];
 
 // Overloaded, rate-limited or timed out: worth trying another model.
 function isBusy(e: unknown) {
   const status = (e as { status?: number })?.status;
-  return status === 429 || status === 500 || status === 503 || /timeout|timed out|abort/i.test(String(e));
+  return (
+    status === 429 ||
+    status === 500 ||
+    status === 503 ||
+    status === 504 ||
+    /timeout|timed out|abort|deadline/i.test(String(e))
+  );
 }
 
 // Turns a short description into validated site content. Falls back to
@@ -123,7 +132,7 @@ export async function generateSiteContent(description: string): Promise<SiteCont
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
     // Fail fast and move to the next model instead of the SDK's long backoff.
-    httpOptions: { timeout: 20_000, retryOptions: { attempts: 1 } },
+    httpOptions: { retryOptions: { attempts: 1 } },
   });
   const responseJsonSchema = buildResponseSchema();
   const started = Date.now();
@@ -149,6 +158,7 @@ export async function generateSiteContent(description: string): Promise<SiteCont
           responseMimeType: "application/json",
           responseJsonSchema,
           temperature: 0.8,
+          httpOptions: { timeout: TIMEOUTS[modelIndex] ?? 20_000, retryOptions: { attempts: 1 } },
           ...(lowThinking && { thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } }),
         },
       });
