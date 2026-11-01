@@ -4,7 +4,8 @@ import { z } from "zod";
 import { DEMO_SITE } from "@/data/content";
 import { type SiteContent, siteContentSchema } from "./site";
 
-const MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+// The lite model answers in seconds; the full model is the fallback.
+const MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 
 export function isGeminiConfigured() {
   return Boolean(process.env.GEMINI_API_KEY);
@@ -108,8 +109,8 @@ export class GeminiError extends Error {}
 // Models to try in order, each with its own time limit (ms). When one is
 // overloaded or too slow, the next one is used. Total stays under the
 // page's maxDuration (90s).
-const MODELS = [...new Set([MODEL, "gemini-flash-lite-latest", "gemini-2.5-flash"])];
-const TIMEOUTS = [40_000, 25_000, 20_000];
+const MODELS = [...new Set([MODEL, "gemini-flash-latest", "gemini-2.5-flash"])];
+const TIMEOUTS = [25_000, 40_000, 20_000];
 
 // Overloaded, rate-limited or timed out: worth trying another model.
 function isBusy(e: unknown) {
