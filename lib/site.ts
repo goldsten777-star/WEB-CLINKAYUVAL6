@@ -20,6 +20,7 @@ export const RESERVED_SLUGS = [
   "static",
   "icon.svg",
   "logo.webp",
+  "hanoch", // the demo site lives at /hanoch
 ] as const;
 
 const text = (max: number) => z.string().trim().min(1).max(max);
