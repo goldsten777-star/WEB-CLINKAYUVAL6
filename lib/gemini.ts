@@ -1,5 +1,5 @@
 import "server-only";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { z } from "zod";
 import { DEMO_SITE } from "@/data/content";
 import { type SiteContent, siteContentSchema } from "./site";
@@ -112,24 +112,39 @@ export async function generateSiteContent(description: string): Promise<SiteCont
 
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const responseJsonSchema = buildResponseSchema();
+  const started = Date.now();
   let lastIssue = "";
+  // Little "thinking" keeps the answer fast; dropped if the model rejects it.
+  let lowThinking = true;
 
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     const contents =
-      attempt === 0
+      lastIssue === ""
         ? description
         : `${description}\n\n(The previous answer was invalid: ${lastIssue}. Fix it and keep every limit.)`;
 
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents,
-      config: {
-        systemInstruction: SYSTEM_PROMPT,
-        responseMimeType: "application/json",
-        responseJsonSchema,
-        temperature: 0.8,
-      },
-    });
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: MODEL,
+        contents,
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          responseMimeType: "application/json",
+          responseJsonSchema,
+          temperature: 0.8,
+          ...(lowThinking && { thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } }),
+        },
+      });
+    } catch (e) {
+      if (lowThinking && /thinking/i.test(String(e))) {
+        console.warn(`Gemini (${MODEL}) rejected thinkingLevel, retrying without it`);
+        lowThinking = false;
+        continue;
+      }
+      throw e;
+    }
+    console.info(`Gemini (${MODEL}) attempt ${attempt + 1}: ${((Date.now() - started) / 1000).toFixed(1)}s`);
 
     let json: unknown;
     try {
