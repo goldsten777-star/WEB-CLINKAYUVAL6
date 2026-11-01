@@ -8,9 +8,9 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const signup = mode === "signup";
   return (
     <>
-      <PlatformHeader>
-        <Link href="/" className="text-base font-medium text-brand underline-offset-4 hover:underline">
-          לאתר ההדגמה
+      <PlatformHeader homeHref="/">
+        <Link href="/hanoch" className="text-base font-medium text-brand underline-offset-4 hover:underline">
+          אתר לדוגמה
         </Link>
       </PlatformHeader>
       <main id="main" className="flex flex-1 items-start justify-center px-4 py-16">

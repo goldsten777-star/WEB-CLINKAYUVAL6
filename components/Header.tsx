@@ -39,14 +39,6 @@ export function Header({ site, links }: { site: SiteData; links: SiteLinks }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          {links.showLogin && (
-            <Link
-              href="/login"
-              className="hidden min-h-11 items-center rounded-full px-4 text-sm font-medium text-brand hover:bg-white sm:inline-flex"
-            >
-              כניסה
-            </Link>
-          )}
           <Link
             href={links.cta}
             className="inline-flex min-h-11 items-center rounded-full bg-cta px-5 text-base font-semibold text-on-cta transition-colors hover:bg-cta-hover"

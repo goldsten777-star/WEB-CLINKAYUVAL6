@@ -14,11 +14,6 @@ export function Footer({ site, links }: { site: SiteData; links: SiteLinks }) {
           <Link href={links.cta} className="underline-offset-4 hover:underline">
             {site.cta_label}
           </Link>
-          {links.showLogin && (
-            <Link href="/login" className="underline-offset-4 hover:underline">
-              כניסה למערכת
-            </Link>
-          )}
         </nav>
       </div>
     </footer>

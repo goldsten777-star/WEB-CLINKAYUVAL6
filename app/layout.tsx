@@ -2,16 +2,12 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/rubik";
 import "./globals.css";
 
+// Defaults for the platform pages. The landing page and each therapist
+// site set their own title and description.
 export const metadata: Metadata = {
-  title: "חנוך המטפל | טיפול בילדים והדרכת הורים (אתר הדגמה)",
-  description:
-    "אתר הדגמה לקליניקה של חנוך המטפל: טיפול בילדים, הדרכת הורים ואבחון ראשוני. לצורכי לימוד בלבד, כל הנתונים בדויים.",
-  openGraph: {
-    title: "חנוך המטפל",
-    description: "טיפול בילדים והדרכת הורים (אתר הדגמה)",
-    locale: "he_IL",
-    type: "website",
-  },
+  title: "בונה אתרים למטפלים (הדגמה)",
+  description: "אתר מקצועי למטפלים, משני משפטים. אתר הדגמה לצורכי לימוד.",
+  openGraph: { title: "בונה אתרים למטפלים", locale: "he_IL", type: "website" },
 };
 
 export const viewport: Viewport = {

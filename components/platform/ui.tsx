@@ -5,11 +5,15 @@ import type { ComponentProps, ReactNode } from "react";
 // Shared look for the platform pages (login, dashboard), built on the
 // same theme tokens as the demo site.
 
-export function PlatformHeader({ children }: { children?: ReactNode }) {
+export function PlatformHeader({ children, homeHref = "/dashboard" }: { children?: ReactNode; homeHref?: string }) {
   return (
     <header className="sticky top-0 z-50 h-[4.5rem] bg-cream/95 shadow-[0_1px_0_rgb(47_58_74/0.06)]">
       <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-4 px-4">
-        <Link href="/dashboard" className="flex items-center gap-2" aria-label="בונה האתרים, ללוח הבקרה">
+        <Link
+          href={homeHref}
+          className="flex items-center gap-2"
+          aria-label={homeHref === "/" ? "בונה האתרים, לדף הבית" : "בונה האתרים, ללוח הבקרה"}
+        >
           <Image src="/default-logo.svg" alt="" width={44} height={44} unoptimized className="h-11 w-11 object-contain" />
           <span className="text-lg font-bold text-brand">בונה האתרים למטפלים</span>
         </Link>
